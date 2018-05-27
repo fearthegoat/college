@@ -122,4 +122,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = ''
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'sandbox0328e6f54eef4bc99a0dd0c3911a574d.mailgun.org'
+# EMAIL_HOST_PASSWORD = '385db3320115ddc7bb810ecc901dde83'
+# EMAIL_USE_TLS = True
+
+# DEFAULT_FROM_EMAIL = 'SmartSurvey <noreply@fbsanalytics.com>'
 

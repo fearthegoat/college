@@ -13,3 +13,10 @@ class ContactForm(forms.Form):
     subject = forms.CharField(required=True, max_length=100,
     	widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Subject'}))
     message = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Message'}))
+
+class OfferForm(forms.Form):
+	offer_date = forms.DateField(required=True)
+#	scholarship_offer = forms.BooleanField(required=True, default = True)
+	forty_yard_dash = forms.FloatField()
+	height = forms.FloatField()
+	weight = forms.FloatField()

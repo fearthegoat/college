@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Comment
+from .models import Comment, College
 from .forms import ContactForm
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -10,6 +10,13 @@ def index(request):
 	context = {'comments' : comments}
 
 	return render(request,'guestbook/index.html', context)
+
+def list(request):
+	colleges = College.objects.order_by('conference')
+	
+	context = {'colleges' : colleges}
+
+	return render(request,'guestbook/list.html', context)
 
 def sign(request):
 	if request.method == 'POST':
@@ -35,7 +42,7 @@ def landingpage(request):
 			message = form.cleaned_data['message']
 			name = form.cleaned_data['name']
 			try:
-				send_mail(subject, message, from_email, ['admin@example.com'])
+				send_mail(subject, message, from_email, ['usacitizen80@hotmail.com'])
 			except BadHeaderError:
 				return HttpResponse('Invalid header found.')
 			return redirect('landingpage')
