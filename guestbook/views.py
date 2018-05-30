@@ -3,6 +3,7 @@ from .models import Comment, College
 from .forms import ContactForm
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
+import requests
 
 def index(request):
 	comments = Comment.objects.order_by('-date_added')
@@ -31,6 +32,15 @@ def sign(request):
 	context = {'form' : form}
 	return render(request, 'guestbook/sign.html', context)
 
+def send_simple_message(subject, from_email, message, name):
+    return requests.post(
+        "https://api.mailgun.net/v3/sandbox0328e6f54eef4bc99a0dd0c3911a574d.mailgun.org",
+        auth=("api", "key-6f0f1b84092d075a462f048ffcfec2e8"),
+        data={"from": "postmaster@sandbox0328e6f54eef4bc99a0dd0c3911a574d.mailgun.org",
+              "to": ["gary_stewart98@hotmail.com"],
+              "subject": subject,
+              "text": name + ' ' + message})
+
 def landingpage(request):
 	if request.method == 'GET':
 		form = ContactForm()
@@ -42,7 +52,8 @@ def landingpage(request):
 			message = form.cleaned_data['message']
 			name = form.cleaned_data['name']
 			try:
-				send_mail(subject, message, from_email, ['usacitizen80@hotmail.com'])
+				send_simple_message(subject, from_email, message, name)
+				#send_mail(subject, message, from_email, ['usacitizen80@hotmail.com'])
 			except BadHeaderError:
 				return HttpResponse('Invalid header found.')
 			return redirect('landingpage')
