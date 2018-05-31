@@ -1,6 +1,8 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Comment(models.Model):
 	name = models.CharField(max_length=20)
@@ -28,12 +30,12 @@ class College(models.Model):
 	name = models.CharField(max_length=40)	
 	conference = models.CharField(max_length=20)
 	city = models.CharField(max_length=40)
-#	zip_code = models.IntegerField(max_length=9)
 	state = models.CharField(max_length=2)
 	latitude = models.FloatField()
 	longitude = models.FloatField()
 	stadium_year_construction = models.IntegerField()
 	stadium_capacity = models.IntegerField()
+#	zip_code = models.IntegerField(max_length=9)
 #	fbs = models.BooleanField() 
 
 	def __str__(self):
@@ -59,3 +61,16 @@ class Offer(models.Model):
 	scholarship_offer = models.BooleanField()
 	active =  models.BooleanField()
 	college_offering = models.ForeignKey(College, on_delete=models.CASCADE)
+
+class Profile(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	college = models.ForeignKey(College, on_delete=models.CASCADE)
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
