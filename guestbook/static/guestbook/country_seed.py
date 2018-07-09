@@ -60,10 +60,3 @@ for bio in bio_files:
 					new_player.high_school=high_school
 			new_player.save()
 
-import glob
-import csv
-from guestbook.models import Player, HighSchool
-
-offer_files = glob.glob('myproject/static/scraper/player*')
-
-
